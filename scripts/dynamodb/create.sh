@@ -1,0 +1,1 @@
+aws dynamodb create-table --table-name activity --attribute-definitions AttributeName=Test_Field,AttributeType=N --key-schema AttributeName=Test_Field,KeyType=HASH --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1
