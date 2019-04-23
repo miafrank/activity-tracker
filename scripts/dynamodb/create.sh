@@ -1,1 +1,2 @@
-aws dynamodb create-table --table-name activity --attribute-definitions AttributeName=Test_Field,AttributeType=N --key-schema AttributeName=Test_Field,KeyType=HASH --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1
+#!/usr/bin/env bash
+aws dynamodb create-table --table-name activity --attribute-definitions AttributeName=Duration,AttributeType=N AttributeName=Activity_Name,AttributeType=S --key-schema AttributeName=Duration,KeyType=HASH AttributeName=Activity_Name,KeyType=RANGE --provisioned-throughput ReadCapacityUnits=1,WriteCapacityUnits=1
