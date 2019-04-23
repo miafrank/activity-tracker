@@ -14,18 +14,11 @@ def get_all_items():
     return jsonify(aws_dynamo_controller.get_items())
 
 
-@app.route("/json", methods=['POST'])
-def init_dummy_request():
+@app.route("/create-activity", methods=['POST'])
+def create_activity():
     request_data = request.get_json()
-    date = request_data['date']
-    duration = request_data['duration']
-    activity_name = request_data['activity_name']
-    return '''
-        The date is: {}
-        The duration is: {}
-        The activity is: {}
-    
-    '''.format(date, duration, activity_name)
+    save = aws_dynamo_controller.create_item(request_data)
+    return jsonify(save)
 
 
 if __name__ == '__main__':
