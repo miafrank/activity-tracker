@@ -40,24 +40,27 @@ def delete_item_by_id(activity_id):
 def update_item_by_id(activity_id, json):
 
     if 'Date' in json.keys():
+        field_name = 'Date'
         date = json['Date']
+        item = update_item_fields(date, activity_id, field_name)
+        return item
     if 'Activity_Name' in json.keys():
         activity_name = json['Activity_Name']
+        item = update_item_fields(activity_name, activity_id)
+        return item
     if 'Duration' in json.keys():
+        field_name = 'Duration'
         duration = json['Duration']
-    item = update_item_fields(date, activity_name, duration, activity_id)
+        item = update_item_fields(duration, activity_id, field_name)
+        return item
 
-    return item
 
-
-def update_item_fields(date, activity_name, duration, activity_id):
+def update_item_fields(field_value, activity_id, field_name):
     item = activity_table_resource.update_item(
         Key={'Id': str(activity_id)},
-        UpdateExpression='set Activity_Name = :a, Date = :d, Duration = :u',
+        UpdateExpression='set Duration = :a',
         ExpressionAttributeValues={
-            ':a': activity_name,
-            ':d': date,
-            ':u': duration
+            ':a': field_value,
         },
         ReturnValues="UPDATED_NEW"
     )
