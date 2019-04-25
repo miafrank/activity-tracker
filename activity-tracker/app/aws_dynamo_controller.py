@@ -44,24 +44,26 @@ def item_exists(response):
         return parse_item_response(response)
 
 
+# todo update method to update all fields at once, response from query only
+# returns first field that is updated
 def update_item_by_id(activity_id, json):
-    if 'Date' in json.keys():
-        field_name = 'Date'
-        date = json['Date']
-        item = update_item_fields(date, activity_id, field_name)
-        return item
-    if 'Activity_Name' in json.keys():
-        activity_name = json['Activity_Name']
-        item = update_item_fields(activity_name, activity_id)
-        return item
-    if 'Duration' in json.keys():
-        field_name = 'Duration'
-        duration = json['Duration']
-        item = update_item_fields(duration, activity_id, field_name)
-        return item
+    if 'activity_date' in json.keys():
+        field_name = 'activity_date'
+        activity_date_value = json['activity_date']
+        item = update_item_fields(activity_id, activity_date_value, field_name)
+    if 'activity_name' in json.keys():
+        field_name = 'activity_name'
+        activity_name_value = json['activity_name']
+        item = update_item_fields(activity_id, activity_name_value, field_name)
+    if 'activity_duration' in json.keys():
+        field_name = 'activity_duration'
+        activity_duration_value = json['activity_duration']
+        item = update_item_fields(activity_id, activity_duration_value, field_name)
+
+    return item
 
 
-def update_item_fields(field_value, activity_id, field_name):
+def update_item_fields(activity_id, field_value, field_name):
     item = activity_table_resource.update_item(
         Key={'id': str(activity_id)},
         # UpdateExpression='set Duration = :a',

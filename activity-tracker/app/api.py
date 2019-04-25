@@ -25,7 +25,9 @@ def get_activity_by_id(activity_id):
 @app.route('/activities/<activity_id>', methods=['PUT'])
 def update_activity_by_id(activity_id):
     request_data = request.get_json()
+    print(request_data)
     update_item = aws_dynamo_controller.update_item_by_id(activity_id, request_data)
+    print(update_item)
     return jsonify(update_item)
 
 
@@ -36,4 +38,4 @@ def delete_activity_by_id(activity_id):
 
 
 if __name__ == '__main__':
-    app.run(port='8080')
+    app.run(port='5000')
