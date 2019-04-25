@@ -1,10 +1,11 @@
 import boto3
 import uuid
 
-dynamodb_resource = boto3.resource('dynamodb')
 activity_table_name = 'activity'
+dynamodb_resource = boto3.resource('dynamodb')
 activity_table_resource = dynamodb_resource.Table(activity_table_name)
 dynamodb_client = boto3.client('dynamodb')
+ITEM_NOT_FOUND = "item not found"
 
 
 def get_all_items():
@@ -21,21 +22,26 @@ def create_new_item(json):
 
 
 def get_item_by_id(activity_id):
-    # todo if id is not found -> send tht back in response to user
     response = activity_table_resource.get_item(
         TableName=activity_table_name,
         Key={'id': str(activity_id)}
     )
-    return parse_item_response(response)
+    item_exists(response)
+    return ITEM_NOT_FOUND
 
 
 def delete_item_by_id(activity_id):
-    # todo if id is not found -> send tht back in response to user
     response = activity_table_resource.delete_item(
         TableName=activity_table_name,
         Key={'id': str(activity_id)}
     )
-    return response
+    item_exists(response)
+    return ITEM_NOT_FOUND
+
+
+def item_exists(response):
+    if 'Item' in response.keys():
+        return parse_item_response(response)
 
 
 def update_item_by_id(activity_id, json):
