@@ -16,7 +16,8 @@ def get_all_items():
 def create_new_item(json):
     random_uuid = uuid.uuid4()
     json['id'] = str(random_uuid)
-    return activity_table_resource.put_item(Item=json)
+    activity_table_resource.put_item(Item=json)
+    return json['id']
 
 
 def get_item_by_id(activity_id):

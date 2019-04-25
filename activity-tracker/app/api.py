@@ -14,9 +14,8 @@ def get_all_items():
 @app.route('/create-activity', methods=['POST'])
 def create_activity():
     request_data = request.get_json()
-    save = aws_dynamo_controller.create_new_item(request_data)
-    # todo return uuid in response
-    return jsonify(save)
+    activity_id = aws_dynamo_controller.create_new_item(request_data)
+    return jsonify(id=activity_id)
 
 
 @app.route('/get_activity_by_id/<activity_id>', methods=['GET'])
