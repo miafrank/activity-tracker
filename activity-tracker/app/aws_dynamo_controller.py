@@ -15,7 +15,7 @@ def get_all_items():
 
 def create_new_item(json):
     random_uuid = uuid.uuid4()
-    json['Id'] = str(random_uuid)
+    json['id'] = str(random_uuid)
     return activity_table_resource.put_item(Item=json)
 
 
@@ -23,7 +23,7 @@ def get_item_by_id(activity_id):
     # todo if id is not found -> send tht back in response to user
     response = activity_table_resource.get_item(
         TableName=activity_table_name,
-        Key={'Id': str(activity_id)}
+        Key={'id': str(activity_id)}
     )
     return parse_item_response(response)
 
@@ -32,13 +32,12 @@ def delete_item_by_id(activity_id):
     # todo if id is not found -> send tht back in response to user
     response = activity_table_resource.delete_item(
         TableName=activity_table_name,
-        Key={'Id': str(activity_id)}
+        Key={'id': str(activity_id)}
     )
     return response
 
 
 def update_item_by_id(activity_id, json):
-
     if 'Date' in json.keys():
         field_name = 'Date'
         date = json['Date']
@@ -57,8 +56,9 @@ def update_item_by_id(activity_id, json):
 
 def update_item_fields(field_value, activity_id, field_name):
     item = activity_table_resource.update_item(
-        Key={'Id': str(activity_id)},
-        UpdateExpression='set Duration = :a',
+        Key={'id': str(activity_id)},
+        # UpdateExpression='set Duration = :a',
+        UpdateExpression='set ' + field_name + '= :a',
         ExpressionAttributeValues={
             ':a': field_value,
         },
@@ -69,16 +69,16 @@ def update_item_fields(field_value, activity_id, field_name):
 
 def parse_item_response(item_response):
     item = item_response['Item']
-    date = item['Date']
-    activity_name = item['Activity_Name']
-    activity_id = str(item['Id'])
-    duration = str(item['Duration'])
+    date = item['activity_date']
+    activity_name = item['activity_name']
+    activity_id = str(item['id'])
+    duration = str(item['activity_duration'])
 
     item_as_dict = {
-            'Id': activity_id,
-            'Date': date,
-            'Activity_Name': activity_name,
-            'Duration': duration
+            'id': activity_id,
+            'activity_date': date,
+            'activity_name': activity_name,
+            'activity_duration': duration
             }
 
     return item_as_dict
