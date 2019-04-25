@@ -1,5 +1,0 @@
- # run script create.sh to create dynamodb table
- # run app with auto reload
-    $ set FLASK_APP=my_application
-    $ set FLASK_DEBUG=1
-    $ flask run
