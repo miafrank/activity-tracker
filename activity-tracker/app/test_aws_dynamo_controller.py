@@ -42,22 +42,25 @@ def test_save_items():
 
 
 @mock_dynamodb2
-def test_item_in_aws_item():
+def test_create_item():
     table = dynamodb_setup()
     item_id = aws_dynamo_controller.generate_uuid()
-    mock_item = {
-        'activity_date': "04/23/2019",
-        'activity_name': "walking",
-        'activity_duration': "3"
-    }
+    mock_item = create_mock_item("04/23/2019", "walking", "3")
 
     aws_dynamo_controller.create_new_item(mock_item, table)
     response = table.get_item(Key={'id': item_id})
-
-    # todo assert that item generated is in response
 
     if 'Item' in response:
         mock_item = response['Item']
 
     assert ("id" in mock_item)
     assert (mock_item["id"], item_id)
+
+
+def create_mock_item(activity_date, activity_name, activity_duration):
+    mock_item = {
+        'activity_date': activity_date,
+        'activity_name': activity_name,
+        'activity_duration': activity_duration
+    }
+    return mock_item

@@ -56,7 +56,6 @@ def update_item_by_id(activity_id, json):
     item = update_activity_date(activity_id, json)
     item = update_activity_name(activity_id, item, json)
     item = update_activity_duration(activity_id, item, json)
-
     return item
 
 
