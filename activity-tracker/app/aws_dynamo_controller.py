@@ -8,16 +8,20 @@ dynamodb_client = boto3.client('dynamodb')
 ITEM_NOT_FOUND = "item not found"
 
 
+def generate_uuid():
+    random_uuid = uuid.uuid4()
+    return str(random_uuid)
+
+
 def get_all_items():
     response = dynamodb_client.scan(TableName=activity_table_name)
     # todo clean up item response
     return response['Items']
 
 
-def create_new_item(json):
-    random_uuid = uuid.uuid4()
-    json['id'] = str(random_uuid)
-    activity_table_resource.put_item(Item=json)
+def create_new_item(json, resource):
+    json['id'] = generate_uuid()
+    resource.put_item(Item=json)
     return json['id']
 
 
@@ -66,7 +70,6 @@ def update_item_by_id(activity_id, json):
 def update_item_fields(activity_id, field_value, field_name):
     item = activity_table_resource.update_item(
         Key={'id': str(activity_id)},
-        # UpdateExpression='set Duration = :a',
         UpdateExpression='set ' + field_name + '= :a',
         ExpressionAttributeValues={
             ':a': field_value,
