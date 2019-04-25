@@ -30,7 +30,8 @@ def get_item_by_id(activity_id):
         TableName=activity_table_name,
         Key={'id': str(activity_id)}
     )
-    item_exists(response)
+    if 'Item' in response.keys():
+        return parse_item_response(response)
     return ITEM_NOT_FOUND
 
 
@@ -39,7 +40,8 @@ def delete_item_by_id(activity_id):
         TableName=activity_table_name,
         Key={'id': str(activity_id)}
     )
-    item_exists(response)
+    if 'Item' in response.keys():
+        return parse_item_response(response)
     return ITEM_NOT_FOUND
 
 
@@ -51,19 +53,34 @@ def item_exists(response):
 # todo update method to update all fields at once, response from query only
 # returns first field that is updated
 def update_item_by_id(activity_id, json):
-    if 'activity_date' in json.keys():
-        field_name = 'activity_date'
-        activity_date_value = json['activity_date']
-        item = update_item_fields(activity_id, activity_date_value, field_name)
-    if 'activity_name' in json.keys():
-        field_name = 'activity_name'
-        activity_name_value = json['activity_name']
-        item = update_item_fields(activity_id, activity_name_value, field_name)
+    item = update_activity_date(activity_id, json)
+    item = update_activity_name(activity_id, item, json)
+    item = update_activity_duration(activity_id, item, json)
+
+    return item
+
+
+def update_activity_duration(activity_id, item, json):
     if 'activity_duration' in json.keys():
         field_name = 'activity_duration'
         activity_duration_value = json['activity_duration']
         item = update_item_fields(activity_id, activity_duration_value, field_name)
+    return item
 
+
+def update_activity_name(activity_id, item, json):
+    if 'activity_name' in json.keys():
+        field_name = 'activity_name'
+        activity_name_value = json['activity_name']
+        item = update_item_fields(activity_id, activity_name_value, field_name)
+    return item
+
+
+def update_activity_date(activity_id, json):
+    if 'activity_date' in json.keys():
+        field_name = 'activity_date'
+        activity_date_value = json['activity_date']
+        item = update_item_fields(activity_id, activity_date_value, field_name)
     return item
 
 
