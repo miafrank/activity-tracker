@@ -2,13 +2,7 @@ import boto3
 import uuid
 
 ITEM_NOT_FOUND = "item not found"
-
-
-def set_up_resource():
-    activity_table_name = 'activity'
-    dynamodb_resource = boto3.resource('dynamodb')
-    activity_table_resource = dynamodb_resource.Table(activity_table_name)
-    return activity_table_resource
+activity_table_name = 'activity'
 
 
 def generate_uuid():
@@ -17,7 +11,6 @@ def generate_uuid():
 
 
 def get_all_items():
-    activity_table_name = set_up_resource()
     response = boto3.client('dynamodb').scan(TableName=activity_table_name)
     # todo clean up item response
     return response['Items']
@@ -31,7 +24,7 @@ def create_new_item(json, resource):
 
 def get_item_by_id(activity_id, resource):
     response = resource.get_item(
-        TableName=resource,
+        TableName=activity_table_name,
         Key={'id': str(activity_id)}
     )
     if 'Item' in response.keys():
@@ -41,7 +34,7 @@ def get_item_by_id(activity_id, resource):
 
 def delete_item_by_id(activity_id, resource):
     response = resource.delete_item(
-        TableName=resource,
+        TableName=activity_table_name,
         Key={'id': str(activity_id)}
     )
     if 'Item' in response.keys():

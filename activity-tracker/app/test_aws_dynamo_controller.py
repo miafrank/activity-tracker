@@ -1,6 +1,10 @@
+import sys
+import traceback
+
 from moto import mock_dynamodb2
 import boto3
 from app import aws_dynamo_controller
+
 
 table_name = 'mock_activity_table'
 
@@ -18,7 +22,7 @@ def dynamodb_setup():
         ],
         AttributeDefinitions=[
             {
-                'AttributeName': 'id',
+                'AttributeName': 'ZS',
                 'AttributeType': 'S'
             },
 
@@ -52,7 +56,7 @@ def create_mock_response(activity_date, activity_name, activity_duration, item_i
 
 
 @mock_dynamodb2
-def test_create_item():
+def test_create_new_item():
     table = dynamodb_setup()
     item_id = aws_dynamo_controller.generate_uuid()
     mock_item = create_mock_item("04/23/2019", "walking", "3")
@@ -64,18 +68,18 @@ def test_create_item():
         mock_item = mock_response['Item']
 
     assert ("id" in mock_item)
-    assert (mock_item["id"], item_id)
 
 
 @mock_dynamodb2
-def test_save_items():
+def test_item_by_id():
     table = dynamodb_setup()
-    item_id = "12346"
-    mock_item = create_mock_item("01/01/2029", "running", "1")
+    item_id = '123'
+    aws_dynamo_controller.get_item_by_id(item_id, table)
+    table.get_item(Key={'id': item_id})
 
-    mock_get_item = table.get_item(Key={'id': item_id})
-    aws_dynamo_controller.get_item_by_id(item_id)
 
-    mock_response = create_mock_response("01/01/2029", "running", "1", "12346")
-
-    assert mock_response['id'] == item_id
+@mock_dynamodb2
+def test_delete_item_by_id():
+    table = dynamodb_setup()
+    item_id = 456
+    aws_dynamo_controller.delete_item_by_id(item_id, table)
