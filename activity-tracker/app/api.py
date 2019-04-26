@@ -34,13 +34,13 @@ def get_activity_by_id(activity_id):
 @app.route('/activities/<activity_id>', methods=['PUT'])
 def update_activity_by_id(activity_id):
     request_data = request.get_json()
-    update_item = aws_dynamo_controller.update_item_by_id(activity_id, request_data)
+    update_item = aws_dynamo_controller.update_item_by_id(activity_id, request_data, set_up_resource())
     return jsonify(update_item)
 
 
 @app.route('/activities/<activity_id>', methods=['DELETE', 'POST'])
 def delete_activity_by_id(activity_id):
-    deleted_item = aws_dynamo_controller.delete_item_by_id(activity_id)
+    deleted_item = aws_dynamo_controller.delete_item_by_id(activity_id, set_up_resource())
     return jsonify(item=deleted_item)
 
 
