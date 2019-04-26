@@ -92,7 +92,6 @@ def test_delete_item_by_id():
     table = dynamodb_setup()
     item_id = 456
     aws_dynamo_controller.delete_item_by_id(item_id, table)
-    aws_dynamo_controller.delete_item_by_id(item_id, table)
 
 
 @mock_dynamodb2
@@ -104,12 +103,10 @@ def test_update_item_by_id():
     mock_json_to_update_date = {'activity_date': "01/28/2019"}
     mock_json_to_update_duration = {'activity_duration': "2"}
     mock_json_to_update_name = {'activity_name': "running"}
-    mock_json_to_update_agfdgf = {'adgfdg': "running"}
 
     aws_dynamo_controller.update_item_by_id(item_id, mock_json_to_update_date, table)
     aws_dynamo_controller.update_item_by_id(item_id, mock_json_to_update_duration, table)
     aws_dynamo_controller.update_item_by_id(item_id, mock_json_to_update_name, table)
-    aws_dynamo_controller.update_item_by_id(item_id, mock_json_to_update_agfdgf, table)
 
     assert mock_json_before_update['activity_date'] != mock_json_to_update_date['activity_date']
     assert mock_json_before_update['activity_duration'] != mock_json_to_update_duration['activity_duration']
