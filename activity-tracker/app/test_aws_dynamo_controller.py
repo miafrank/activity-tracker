@@ -22,7 +22,7 @@ def dynamodb_setup():
         ],
         AttributeDefinitions=[
             {
-                'AttributeName': 'ZS',
+                'AttributeName': 'id',
                 'AttributeType': 'S'
             },
 
@@ -74,7 +74,16 @@ def test_create_new_item():
 def test_item_by_id():
     table = dynamodb_setup()
     item_id = '123'
+    table.put_item(
+        Item={
+            'activity_date': "02/09/2222",
+            'activity_name': "hang gliding",
+            'activity_duration': "50",
+            'id': item_id
+        }
+    )
     aws_dynamo_controller.get_item_by_id(item_id, table)
+
     table.get_item(Key={'id': item_id})
 
 
@@ -83,3 +92,20 @@ def test_delete_item_by_id():
     table = dynamodb_setup()
     item_id = 456
     aws_dynamo_controller.delete_item_by_id(item_id, table)
+    aws_dynamo_controller.delete_item_by_id(item_id, table)
+
+
+@mock_dynamodb2
+def test_update_item_by_id():
+    table = dynamodb_setup()
+    item_id = "555"
+    mock_json_before_update = create_mock_response("02/18/2019", "walking", "1", "555")
+    mock_json_to_update_date_name = {'activity_date': "01/28/2019"}
+
+    aws_dynamo_controller.update_item_by_id(item_id, mock_json_to_update_date_name, table)
+
+    assert mock_json_before_update['activity_date'] != mock_json_to_update_date_name['activity_date']
+
+
+
+
