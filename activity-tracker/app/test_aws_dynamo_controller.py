@@ -100,12 +100,17 @@ def test_update_item_by_id():
     table = dynamodb_setup()
     item_id = "555"
     mock_json_before_update = create_mock_response("02/18/2019", "walking", "1", "555")
-    mock_json_to_update_date_name = {'activity_date': "01/28/2019"}
 
-    aws_dynamo_controller.update_item_by_id(item_id, mock_json_to_update_date_name, table)
+    mock_json_to_update_date = {'activity_date': "01/28/2019"}
+    mock_json_to_update_duration = {'activity_duration': "2"}
+    mock_json_to_update_name = {'activity_name': "running"}
+    mock_json_to_update_agfdgf = {'adgfdg': "running"}
 
-    assert mock_json_before_update['activity_date'] != mock_json_to_update_date_name['activity_date']
+    aws_dynamo_controller.update_item_by_id(item_id, mock_json_to_update_date, table)
+    aws_dynamo_controller.update_item_by_id(item_id, mock_json_to_update_duration, table)
+    aws_dynamo_controller.update_item_by_id(item_id, mock_json_to_update_name, table)
+    aws_dynamo_controller.update_item_by_id(item_id, mock_json_to_update_agfdgf, table)
 
-
-
-
+    assert mock_json_before_update['activity_date'] != mock_json_to_update_date['activity_date']
+    assert mock_json_before_update['activity_duration'] != mock_json_to_update_duration['activity_duration']
+    assert mock_json_before_update['activity_name'] != mock_json_to_update_name['activity_name']

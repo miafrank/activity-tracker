@@ -50,34 +50,34 @@ def item_exists(response):
 # todo update method to update all fields at once, response from query only
 # returns first field that is updated
 def update_item_by_id(activity_id, json, resource):
-    item = update_activity_date(activity_id, json, resource)
-    item = update_activity_name(activity_id, item, json, resource)
-    item = update_activity_duration(activity_id, item, json, resource)
-    return item
+    activity_date = 'activity_date'
+    activity_name = 'activity_name'
+    activity_duration = 'activity_duration'
+
+    if len(json) > 0 and activity_date in json.keys():
+        update_activity_date(activity_id, json, resource)
+    if len(json) > 0 and activity_name in json.keys():
+        update_activity_name(activity_id, json, resource)
+    if len(json) > 0 and activity_duration in json.keys():
+        update_activity_duration(activity_id, json, resource)
 
 
-def update_activity_duration(activity_id, item, json, resource):
-    if 'activity_duration' in json.keys():
-        field_name = 'activity_duration'
-        activity_duration_value = json['activity_duration']
-        item = update_item_fields(activity_id, activity_duration_value, field_name, resource)
-    return item
+def update_activity_duration(activity_id, json, resource):
+    field_name = 'activity_duration'
+    activity_duration_value = json['activity_duration']
+    update_item_fields(activity_id, activity_duration_value, field_name, resource)
 
 
-def update_activity_name(activity_id, item, json, resource):
-    if 'activity_name' in json.keys():
-        field_name = 'activity_name'
-        activity_name_value = json['activity_name']
-        item = update_item_fields(activity_id, activity_name_value, field_name, resource)
-    return item
+def update_activity_name(activity_id, json, resource):
+    field_name = 'activity_name'
+    activity_name_value = json['activity_name']
+    update_item_fields(activity_id, activity_name_value, field_name, resource)
 
 
 def update_activity_date(activity_id, json, resource):
-    if 'activity_date' in json.keys():
-        field_name = 'activity_date'
-        activity_date_value = json['activity_date']
-        item = update_item_fields(activity_id, activity_date_value, field_name, resource)
-    return item
+    field_name = 'activity_date'
+    activity_date_value = json['activity_date']
+    update_item_fields(activity_id, activity_date_value, field_name, resource)
 
 
 def update_item_fields(activity_id, field_value, field_name, resource):
@@ -99,11 +99,16 @@ def parse_item_response(item_response):
     activity_id = str(item['id'])
     duration = str(item['activity_duration'])
 
-    item_as_dict = {
-            'id': activity_id,
-            'activity_date': date,
-            'activity_name': activity_name,
-            'activity_duration': duration
-            }
+    item_dict = item_as_dict(activity_id, activity_name, date, duration)
 
-    return item_as_dict
+    return item_dict
+
+
+def item_as_dict(activity_id, activity_name, date, duration):
+    item = {
+        'id': activity_id,
+        'activity_date': date,
+        'activity_name': activity_name,
+        'activity_duration': duration
+    }
+    return item
