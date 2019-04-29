@@ -70,29 +70,29 @@ def update_item_by_id(activity_id, json, resource):
     activity_duration = 'activity_duration'
 
     if len(json) > 0 and activity_date in json.keys():
-        update_activity_date(activity_id, json, resource)
+        return update_activity_date(activity_id, json, resource)
     if len(json) > 0 and activity_name in json.keys():
-        update_activity_name(activity_id, json, resource)
+        return update_activity_name(activity_id, json, resource)
     if len(json) > 0 and activity_duration in json.keys():
-        update_activity_duration(activity_id, json, resource)
+        return update_activity_duration(activity_id, json, resource)
 
 
 def update_activity_duration(activity_id, json, resource):
     field_name = 'activity_duration'
     activity_duration_value = json['activity_duration']
-    update_item_fields(activity_id, activity_duration_value, field_name, resource)
+    return update_item_fields(activity_id, activity_duration_value, field_name, resource)
 
 
 def update_activity_name(activity_id, json, resource):
     field_name = 'activity_name'
     activity_name_value = json['activity_name']
-    update_item_fields(activity_id, activity_name_value, field_name, resource)
+    return update_item_fields(activity_id, activity_name_value, field_name, resource)
 
 
 def update_activity_date(activity_id, json, resource):
     field_name = 'activity_date'
     activity_date_value = json['activity_date']
-    update_item_fields(activity_id, activity_date_value, field_name, resource)
+    return update_item_fields(activity_id, activity_date_value, field_name, resource)
 
 
 def update_item_fields(activity_id, field_value, field_name, resource):
