@@ -9,9 +9,9 @@
 
 |request name  |  request value  |
 :-------:|:-------:
-|get all activities    | _/GET/activities_
-|create activity       | _/POST/activities_
-|get activity by id    | _/GET/activities/{id}_
-|delete by id          | _/POST or DELETE/activities/{id}_
-|update by id          | _/PUT/activities/{id}_
+|get all activities    | _GET/activities_
+|create activity       | _POST/activities_
+|get activity by id    | _GET/activities/{id}_
+|delete by id          | _POST or DELETE/activities/{id}_
+|update by id          | _PUT/activities/{id}_
 
