@@ -6,20 +6,43 @@
 	},
 	"item": [
 		{
-			"name": "Create New Activity",
-			"request": {
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"name": "Content-Type",
-						"value": "application/json",
-						"type": "text"
+			"name": "Create Activity",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "81d0f272-4494-4b1f-bd50-176da7e3bacb",
+						"exec": [
+							""
+						],
+						"type": "text/javascript"
 					}
-				],
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "a23a2dcb-696d-40fa-9a04-c8b26235df62",
+						"exec": [
+							"pm.test(\"get request returns OK status\", function() {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"get request json\", function() {",
+							"    pm.response.to.be.json;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"activity_date\":\"04/30/2019\",\n\t\"activity_name\": \"running\", \n\t\"activity_duration\": \"2\"\n}"
+					"raw": ""
 				},
 				"url": {
 					"raw": "localhost:5000/activities",
