@@ -15,7 +15,7 @@ def get_all_items():
     response = boto3.client('dynamodb').scan(TableName=activity_table_name)
     clean_item = []
     for item in response['Items']:
-        clean_item.append(item_as_dict(item))
+        clean_item.append(parse_multi_item_response(item))
     return clean_item
 
 
@@ -109,16 +109,30 @@ def update_item_fields(activity_id, field_value, field_name, resource):
 
 def parse_item_response(item_response):
     item = item_response['Item']
-    item_dict = item_as_dict(item)
+    item_dict = parse_single_item_response(item)
     return item_dict
 
 
-def item_as_dict(item):
+def parse_single_item_response(item):
+    activity_id = item['id']
+    activity_date = item['activity_date']
+    activity_name = item['activity_name']
+    activity_duration = item['activity_duration']
+
+    return item_response_as_dict(activity_date, activity_duration, activity_id, activity_name)
+
+
+def parse_multi_item_response(item):
     activity_id = get_item_field_value(item['id'])
     activity_date = get_item_field_value(item['activity_date'])
     activity_name = get_item_field_value(item['activity_name'])
     activity_duration = get_item_field_value(item['activity_duration'])
 
+    item_dict = item_response_as_dict(activity_date, activity_duration, activity_id, activity_name)
+    return item_dict
+
+
+def item_response_as_dict(activity_date, activity_duration, activity_id, activity_name):
     item_dict = {
         'activity_id': activity_id,
         'activity_date': activity_date,
