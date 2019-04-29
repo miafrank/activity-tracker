@@ -6,7 +6,6 @@
     $ flask run
 
 # endpoints
----
 
 |request name  |  request value  |
 :-------:|:-------:
