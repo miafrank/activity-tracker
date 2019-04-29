@@ -2,6 +2,7 @@ import boto3
 import uuid
 
 ITEM_NOT_FOUND = "item not found"
+ITEM_DELETED_SUCCESSFULLY = "item deleted successfully"
 activity_table_name = 'activity'
 
 
@@ -23,40 +24,42 @@ def create_new_item(json, resource):
 
 
 def get_item_by_id(activity_id, resource):
-    response = resource.get_item(
-        TableName=activity_table_name,
-        Key={'id': str(activity_id)}
-    )
+    response = get_item_by_table_name_and_key(activity_id, resource)
     if 'Item' in response.keys():
         return parse_item_response(response)
     return ITEM_NOT_FOUND
 
 
-def delete_item_by_id(activity_id, resource):
-    response = resource.delete_item(
+def get_item_by_table_name_and_key(activity_id, resource):
+    response = resource.get_item(
         TableName=activity_table_name,
         Key={'id': str(activity_id)}
     )
+    return response
 
-    print(response)
 
-    item = is_item_deleted_successfully(response)
-    return item
+def delete_item_by_id(activity_id, resource):
+    item_exists_in_table = get_item_by_table_name_and_key(activity_id, resource)
+    print(type(item_exists_in_table))
+
+    if 'Item' in item_exists_in_table.keys():
+        response = resource.delete_item(
+            TableName=activity_table_name,
+            Key={'id': str(activity_id)}
+        )
+        return is_item_deleted_successfully(response)
+    else:
+        return ITEM_NOT_FOUND
 
 
 def is_item_deleted_successfully(response):
     response_meta = response['ResponseMetadata']
     http_status = response_meta['HTTPStatusCode']
+    OK = 200
 
-    if http_status == 200:
-        return "item deleted successfully"
-    else:
-        return ITEM_NOT_FOUND
-
-
-def item_exists(response):
-    if 'Item' in response.keys():
-        return parse_item_response(response)
+    # todo use http status code lib
+    if http_status == OK:
+        return ITEM_DELETED_SUCCESSFULLY
 
 
 # todo update method to update all fields at once, response from query only
