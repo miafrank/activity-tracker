@@ -48,12 +48,12 @@ def delete_item_by_id(activity_id, resource):
             TableName=activity_table_name,
             Key={'id': str(activity_id)}
         )
-        return is_item_deleted_successfully(response)
+        return item_deleted_successfully(response)
     else:
         return ITEM_NOT_FOUND
 
 
-def is_item_deleted_successfully(response):
+def item_deleted_successfully(response):
     response_meta = response['ResponseMetadata']
     http_status = response_meta['HTTPStatusCode']
     OK = 200
