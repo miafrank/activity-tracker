@@ -37,9 +37,21 @@ def delete_item_by_id(activity_id, resource):
         TableName=activity_table_name,
         Key={'id': str(activity_id)}
     )
-    if 'Item' in response.keys():
-        return parse_item_response(response)
-    return ITEM_NOT_FOUND
+
+    print(response)
+
+    item = is_item_deleted_successfully(response)
+    return item
+
+
+def is_item_deleted_successfully(response):
+    response_meta = response['ResponseMetadata']
+    http_status = response_meta['HTTPStatusCode']
+
+    if http_status == 200:
+        return "item deleted successfully"
+    else:
+        return ITEM_NOT_FOUND
 
 
 def item_exists(response):
