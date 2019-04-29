@@ -13,8 +13,10 @@ def generate_uuid():
 
 def get_all_items():
     response = boto3.client('dynamodb').scan(TableName=activity_table_name)
-    # todo clean up item response
-    return response['Items']
+    clean_item = []
+    for item in response['Items']:
+        clean_item.append(item_as_dict(item))
+    return clean_item
 
 
 def create_new_item(json, resource):
@@ -40,7 +42,6 @@ def get_item_by_table_name_and_key(activity_id, resource):
 
 def delete_item_by_id(activity_id, resource):
     item_exists_in_table = get_item_by_table_name_and_key(activity_id, resource)
-    print(type(item_exists_in_table))
 
     if 'Item' in item_exists_in_table.keys():
         response = resource.delete_item(
@@ -62,8 +63,7 @@ def is_item_deleted_successfully(response):
         return ITEM_DELETED_SUCCESSFULLY
 
 
-# todo update method to update all fields at once, response from query only
-# returns first field that is updated
+# todo update method to update all fields at once + response from query only returns first field that is updated
 def update_item_by_id(activity_id, json, resource):
     activity_date = 'activity_date'
     activity_name = 'activity_name'
@@ -109,21 +109,24 @@ def update_item_fields(activity_id, field_value, field_name, resource):
 
 def parse_item_response(item_response):
     item = item_response['Item']
-    date = item['activity_date']
-    activity_name = item['activity_name']
-    activity_id = str(item['id'])
-    duration = str(item['activity_duration'])
-
-    item_dict = item_as_dict(activity_id, activity_name, date, duration)
-
+    item_dict = item_as_dict(item)
     return item_dict
 
 
-def item_as_dict(activity_id, activity_name, date, duration):
-    item = {
-        'id': activity_id,
-        'activity_date': date,
+def item_as_dict(item):
+    activity_id = get_item_field_value(item['id'])
+    activity_date = get_item_field_value(item['activity_date'])
+    activity_name = get_item_field_value(item['activity_name'])
+    activity_duration = get_item_field_value(item['activity_duration'])
+
+    item_dict = {
+        'activity_id': activity_id,
+        'activity_date': activity_date,
         'activity_name': activity_name,
-        'activity_duration': duration
+        'activity_duration': activity_duration
     }
-    return item
+    return item_dict
+
+
+def get_item_field_value(field_name):
+    return field_name.get('S')
