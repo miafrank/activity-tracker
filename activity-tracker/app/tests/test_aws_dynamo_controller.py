@@ -1,6 +1,6 @@
 import boto3
 from moto import mock_dynamodb2
-from app import aws_dynamo_controller
+from app.dynamodb import aws_dynamo_controller
 import pytest
 
 
