@@ -44,5 +44,18 @@ def delete_activity_by_id(activity_id):
     return jsonify(item=deleted_item)
 
 
+@app.route('/activities/query_by_activity/<activity>', methods=['GET'])
+def query_by_activity(activity):
+    query = aws_dynamo_controller.query_by_activity(activity, set_up_resource())
+    return jsonify(query=query)
+
+
+@app.route('/activities/query_by_date', methods=['GET'])
+def query_by_date():
+    request_data = request.get_json()
+    query = aws_dynamo_controller.query_by_date(request_data, set_up_resource())
+    return jsonify(query=query)
+
+
 if __name__ == '__main__':
     app.run(port='5000')

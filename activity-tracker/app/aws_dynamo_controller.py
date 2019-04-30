@@ -1,5 +1,7 @@
 import boto3
 import uuid
+
+from boto3.dynamodb.conditions import Key, Attr
 from flask_api import status
 
 ITEM_NOT_FOUND = "item not found"
@@ -14,10 +16,10 @@ def generate_uuid():
 
 def get_all_items():
     response = boto3.client('dynamodb').scan(TableName=activity_table_name)
-    item = []
+    items = []
     for item in response['Items']:
-        item.append(parse_multi_item_response(item))
-    return item
+        items.append(parse_multi_item_response(item))
+    return items
 
 
 def create_new_item(json, resource):
@@ -104,6 +106,30 @@ def update_item_fields(activity_id, field_value, field_name, resource):
         ReturnValues="UPDATED_NEW"
     )
     return item
+
+
+def query_by_activity(activity_name, resource):
+    response = resource.scan(
+        FilterExpression=Attr('activity_name').eq(activity_name)
+    )
+    items = []
+    for item in response['Items']:
+        items.append(parse_single_item_response(item))
+    return items
+
+
+# filters based on month and day but does not consider year?
+# todo look into why
+def query_by_date(json, resource):
+    start_date = json['start_date']
+    end_date = json['end_date']
+    response = resource.scan(
+        FilterExpression=Attr('activity_date').between(start_date, end_date)
+    )
+    items = []
+    for item in response['Items']:
+        items.append(parse_single_item_response(item))
+    return items
 
 
 def parse_item_response(item_response):
