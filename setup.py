@@ -15,6 +15,7 @@ setup(name='activity-rest-api',
       py_modules=[splitext(basename(path))[0] for path in glob('activity-tracker/*.py')], install_requires=['boto3',
                                                                                                             'flask',
                                                                                                             'requests',
-                                                                                                            'moto'
+                                                                                                            'moto',
+                                                                                                            'Flask-API.yandex'
                                                                                                             ]
       )

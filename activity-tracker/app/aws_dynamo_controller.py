@@ -1,5 +1,6 @@
 import boto3
 import uuid
+from flask_api import status
 
 ITEM_NOT_FOUND = "item not found"
 ITEM_DELETED_SUCCESSFULLY = "item deleted successfully"
@@ -13,10 +14,10 @@ def generate_uuid():
 
 def get_all_items():
     response = boto3.client('dynamodb').scan(TableName=activity_table_name)
-    clean_item = []
+    item = []
     for item in response['Items']:
-        clean_item.append(parse_multi_item_response(item))
-    return clean_item
+        item.append(parse_multi_item_response(item))
+    return item
 
 
 def create_new_item(json, resource):
@@ -56,10 +57,8 @@ def delete_item_by_id(activity_id, resource):
 def item_deleted_successfully(response):
     response_meta = response['ResponseMetadata']
     http_status = response_meta['HTTPStatusCode']
-    OK = 200
 
-    # todo use http status code lib
-    if http_status == OK:
+    if http_status == status.HTTP_200_OK:
         return ITEM_DELETED_SUCCESSFULLY
 
 
