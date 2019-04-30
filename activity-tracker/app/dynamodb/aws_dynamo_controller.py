@@ -108,7 +108,8 @@ def update_item_fields(activity_id, field_value, field_name, resource):
     return item
 
 
-def query_by_activity(activity_name, resource):
+def query_by_activity(json, resource):
+    activity_name = json['activity_name']
     response = resource.scan(
         FilterExpression=Attr('activity_name').eq(activity_name)
     )

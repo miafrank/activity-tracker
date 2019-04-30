@@ -6,9 +6,9 @@ application = Flask(__name__)
 
 
 @application.route('/activities/query_by_activity', methods=['GET'])
-def query_by_activity(activity):
+def query_by_activity():
     request_data = request.get_json()
-    query = aws_dynamo_controller.query_by_activity(activity, dynamodb_resource.set_up_resource())
+    query = aws_dynamo_controller.query_by_activity(request_data, dynamodb_resource.set_up_resource())
     return jsonify(query=query)
 
 
