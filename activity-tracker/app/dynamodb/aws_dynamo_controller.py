@@ -1,7 +1,7 @@
 import boto3
 import uuid
 
-from boto3.dynamodb.conditions import Key, Attr
+from boto3.dynamodb.conditions import Attr
 from flask_api import status
 
 ITEM_NOT_FOUND = "item not found"
