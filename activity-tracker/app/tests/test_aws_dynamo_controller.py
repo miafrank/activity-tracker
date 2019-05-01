@@ -161,3 +161,30 @@ def test_query_by_activity():
     assert items[1].get('activity_id') == "c727f0c6-08ad-4311-a358-5ad4ae2fbc19"
     assert 'running' in items[0].get('activity_name')
     assert len(items) == 2
+
+
+@mock_dynamodb2
+def test_query_by_date():
+    table = dynamodb_setup()
+    activity_start_and_end_dates = {'start_date': '04/01/2019', 'end_date': '04/15/2019'}
+
+    item_within_date_range = table.put_item(
+        Item={
+            "activity_date": "04/17/2019",
+            "activity_duration": "1",
+            "id": "de33dfef-e157-48a2-b6d9-fa28caf4db99",
+            'activity_name': 'running'
+        })
+
+    item_out_of_date_range = table.put_item(
+        Item={
+            "activity_date": "04/30/2019",
+            "activity_duration": "1",
+            "id": "c727f0c6-08ad-4311-a358-5ad4ae2fbc19",
+            "activity_name": "running"
+        })
+
+    items = aws_dynamo_controller.query_by_date(activity_start_and_end_dates, table)
+    assert item_within_date_range == items
+    assert item_out_of_date_range not in items
+    assert len(items) == 1
