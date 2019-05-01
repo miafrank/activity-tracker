@@ -3,7 +3,6 @@ from moto import mock_dynamodb2
 from app.dynamodb import aws_dynamo_controller
 import pytest
 
-
 table_name = 'mock_activity_table'
 
 
@@ -67,10 +66,11 @@ def test_create_new_item():
 
     assert ("id" in mock_item)
 
+
 # todo mock is not being used when getting get_item_by_id could be moto issue
 @mock_dynamodb2
 @pytest.mark.skip
-def test_item_by_id():
+def test_get_item_by_id():
     table = dynamodb_setup()
     item_id = '123'
     response = table.put_item(
@@ -81,7 +81,6 @@ def test_item_by_id():
             'id': item_id
         }
     )
-
     mock_item = aws_dynamo_controller.get_item_by_id(item_id, table)
 
     assert 'Item' in mock_item
@@ -113,3 +112,40 @@ def test_update_item_by_id():
     assert mock_json_before_update['activity_date'] != mock_json_to_update_date['activity_date']
     assert mock_json_before_update['activity_duration'] != mock_json_to_update_duration['activity_duration']
     assert mock_json_before_update['activity_name'] != mock_json_to_update_name['activity_name']
+
+
+@mock_dynamodb2
+def test_query_by_activity():
+    table = dynamodb_setup()
+    activity_name_json = {'activity_name': 'running'}
+
+    table.put_item(
+        Item={
+            "activity_date": "04/17/2019",
+            "activity_duration": "1",
+            "id": "de33dfef-e157-48a2-b6d9-fa28caf4db99",
+            'activity_name': 'running'
+        })
+
+    table.put_item(
+        Item={
+            "activity_date": "04/30/2019",
+            "activity_duration": "1",
+            "id": "c727f0c6-08ad-4311-a358-5ad4ae2fbc19",
+            "activity_name": "running"
+        })
+
+    table.put_item(
+        Item={
+            "activity_date": "06/30/2019",
+            "activity_duration": "1",
+            "id": "c727f0c6-08ad-4311-9999-5ad4ae2fbc19",
+            "activity_name": "swimming"
+        })
+
+    items = aws_dynamo_controller.query_by_activity(activity_name_json, table)
+
+    assert items[0].get('activity_id') == "de33dfef-e157-48a2-b6d9-fa28caf4db99"
+    assert items[1].get('activity_id') == "c727f0c6-08ad-4311-a358-5ad4ae2fbc19"
+    assert 'running' in items[0].get('activity_name')
+    assert len(items) == 2
