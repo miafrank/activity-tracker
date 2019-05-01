@@ -118,8 +118,7 @@ def query_by_activity(json, resource):
     return items
 
 
-# filters based on month and day but does not consider year?
-# todo look into why
+# todo look into filtering - takes into account month and day but not year
 def query_by_date(json, resource):
     start_date = json['start_date']
     end_date = json['end_date']
