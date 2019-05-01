@@ -1,11 +1,15 @@
-# run script to create dynamodb table
+## run script to create dynamodb table
     $ sh create.sh 
-# run app with auto reload
+## install packages
+    $ pipenv install
+## activate virtual env
+    $ pipenv shell
+## run app with auto reload
     $ set FLASK_APP=app.api.api.py
     $ set FLASK_DEBUG=1
     $ flask run
 
-# endpoints
+## endpoints
 
 |request name  |  request value  |
 :-------:|:-------:
@@ -15,3 +19,9 @@
 |delete by id          | _POST or DELETE/activities/{id}_
 |update by id          | _PUT/activities/{id}_
 
+
+### tech stack
++ language: python 3.7
++ api framework: flask 1.0.2
++ unit testing frameworks: pytest, unittest, moto
++ database: aws dynamodb
