@@ -1,7 +1,6 @@
 import boto3
 from moto import mock_dynamodb2
 from app.dynamodb import aws_dynamo_controller
-import pytest
 
 table_name = 'mock_activity_table'
 
@@ -70,7 +69,7 @@ def test_create_new_item():
 @mock_dynamodb2
 def test_get_item_by_id():
     table = dynamodb_setup()
-    item_id = '123'
+    item_id = "123"
     table.put_item(
         Item={
             'activity_date': "02/09/2222",
@@ -81,16 +80,14 @@ def test_get_item_by_id():
     )
     mock_item = aws_dynamo_controller.get_item_by_id(item_id, table, table_name)
 
-    assert mock_item['activity_id'] == item_id
+    assert mock_item['activity_id'] == "123"
     assert mock_item['activity_duration'] == "50"
 
 
-# todo mock get_item does not return item object, but meta data. test cannot pass.
-@pytest.mark.skip
 @mock_dynamodb2
 def test_delete_item_by_id():
     table = dynamodb_setup()
-    item_id = 456
+    item_id = "456"
     table.put_item(
         Item={
             "activity_date": "04/17/2019",
@@ -101,6 +98,13 @@ def test_delete_item_by_id():
     deleted_item = aws_dynamo_controller.delete_item_by_id(item_id, table, table_name)
 
     assert deleted_item == "item deleted successfully"
+
+
+@mock_dynamodb2
+def test_delete_item_by_id_where_id_not_found_in_db():
+    table = dynamodb_setup()
+    deleted_item = aws_dynamo_controller.delete_item_by_id("222", table, table_name)
+    assert deleted_item == "item not found"
 
 
 @mock_dynamodb2
