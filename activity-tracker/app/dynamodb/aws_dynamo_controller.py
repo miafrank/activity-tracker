@@ -6,7 +6,6 @@ from flask_api import status
 
 ITEM_NOT_FOUND = "item not found"
 ITEM_DELETED_SUCCESSFULLY = "item deleted successfully"
-activity_table_name = 'activity'
 
 
 def generate_uuid():
@@ -14,7 +13,7 @@ def generate_uuid():
     return str(random_uuid)
 
 
-def get_all_items():
+def get_all_items(activity_table_name):
     response = boto3.client('dynamodb').scan(TableName=activity_table_name)
     items = []
     for item in response['Items']:
@@ -28,23 +27,23 @@ def create_new_item(json, resource):
     return json['id']
 
 
-def get_item_by_id(activity_id, resource):
-    response = get_item_by_table_name_and_key(activity_id, resource)
+def get_item_by_id(activity_id, resource, table_name):
+    response = get_item_by_table_name_and_key(activity_id, resource, table_name)
     if 'Item' in response.keys():
         return parse_item_response(response)
     return ITEM_NOT_FOUND
 
 
-def get_item_by_table_name_and_key(activity_id, resource):
+def get_item_by_table_name_and_key(activity_id, resource, table_name):
     response = resource.get_item(
-        TableName=activity_table_name,
+        TableName=table_name,
         Key={'id': str(activity_id)}
     )
     return response
 
 
-def delete_item_by_id(activity_id, resource):
-    item_exists_in_table = get_item_by_table_name_and_key(activity_id, resource)
+def delete_item_by_id(activity_id, resource, activity_table_name):
+    item_exists_in_table = get_item_by_table_name_and_key(activity_id, resource, activity_table_name)
 
     if 'Item' in item_exists_in_table.keys():
         response = resource.delete_item(

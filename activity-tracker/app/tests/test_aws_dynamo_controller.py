@@ -67,13 +67,11 @@ def test_create_new_item():
     assert ("id" in mock_item)
 
 
-# todo mock is not being used when getting get_item_by_id could be moto issue
 @mock_dynamodb2
-@pytest.mark.skip
 def test_get_item_by_id():
     table = dynamodb_setup()
     item_id = '123'
-    response = table.put_item(
+    table.put_item(
         Item={
             'activity_date': "02/09/2222",
             'activity_name': "hang gliding",
@@ -81,18 +79,28 @@ def test_get_item_by_id():
             'id': item_id
         }
     )
-    mock_item = aws_dynamo_controller.get_item_by_id(item_id, table)
+    mock_item = aws_dynamo_controller.get_item_by_id(item_id, table, table_name)
 
-    assert 'Item' in mock_item
+    assert mock_item['activity_id'] == item_id
+    assert mock_item['activity_duration'] == "50"
 
 
-# todo mock is not being used when getting get_item_by_id could be moto issue
-@mock_dynamodb2
+# todo mock get_item does not return item object, but meta data. test cannot pass.
 @pytest.mark.skip
+@mock_dynamodb2
 def test_delete_item_by_id():
     table = dynamodb_setup()
     item_id = 456
-    aws_dynamo_controller.delete_item_by_id(item_id, table)
+    table.put_item(
+        Item={
+            "activity_date": "04/17/2019",
+            "activity_duration": "1",
+            "id": item_id,
+            'activity_name': 'running'
+        })
+    deleted_item = aws_dynamo_controller.delete_item_by_id(item_id, table, table_name)
+
+    assert deleted_item == "item deleted successfully"
 
 
 @mock_dynamodb2
