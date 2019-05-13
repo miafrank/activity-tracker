@@ -17,7 +17,47 @@
         </tr>
     </tbody>
 </table>
-  </div>
+
+<b-modal ref="addActivityModal"
+         id="activity-modal"
+         title="Add a new activity"
+         hide-footer>
+  <b-form @submit="onSubmit" @reset="onReset" class="w-100">
+  <b-form-group id="form-date-group"
+                label="Date:"
+                label-for="form-date-input">
+      <b-form-input id="form-date-input"
+                    type="text"
+                    v-model="addActivityForm.date"
+                    required
+                    placeholder="Enter Date">
+      </b-form-input>
+    </b-form-group>
+    <b-form-group id="form-duration-group"
+                  label="Duration:"
+                  label-for="form-duration-input">
+        <b-form-input id="form-duration-input"
+                      type="text"
+                      v-model="addActivityForm.duration"
+                      required
+                      placeholder="Enter Duration">
+        </b-form-input>
+      </b-form-group>
+          <b-form-group id="form-name-group"
+                  label="Name:"
+                  label-for="form-name-input">
+        <b-form-input id="form-name-input"
+                      type="text"
+                      v-model="addActivityForm.name"
+                      required
+                      placeholder="Enter author">
+        </b-form-input>
+      </b-form-group>
+    <b-button type="submit" variant="primary">Submit</b-button>
+    <b-button type="reset" variant="danger">Reset</b-button>
+  </b-form>
+</b-modal>
+</div>
 </template>
 
 <script>
@@ -27,6 +67,11 @@ export default {
   data() {
     return {
       activities: [],
+      addActivityForm: {
+        date: '',
+        duration: '',
+        name: '',
+      },
     };
   },
   methods: {
@@ -35,6 +80,13 @@ export default {
       axios.get(path)
         .then((res) => {
           this.activities = res.data.activities;
+        });
+    },
+    addActivity(json) {
+      const path = 'http://localhost:5000/activities';
+      axios.post(path, json)
+        .then(() => {
+          this.getActivities();
         });
     },
   },
