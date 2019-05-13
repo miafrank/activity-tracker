@@ -1,9 +1,22 @@
 <template>
   <div>
-    <ul id="activities">
-      <li v-for="activity in activities" v-bind:key="activity.activity_id">
-          {{ activity.activity_id }}</li>
-    </ul>
+<h1>Activities</h1>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th scope="col">Date</th>
+            <th scope="col">Duration</th>
+            <th scope="col">Name</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr v-for="activity in activities" v-bind:key="activity.activity_id">
+            <td>{{activity.activity_date}}</td>
+            <td>{{activity.activity_duration}}</td>
+            <td>{{activity.activity_name}}</td>
+        </tr>
+    </tbody>
+</table>
   </div>
 </template>
 
