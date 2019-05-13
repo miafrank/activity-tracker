@@ -1,6 +1,8 @@
 <template>
-  <div>
+  <div class="container">
 <h1>Activities</h1>
+<button type="button" class="btn btn-success btn-sm" v-b-modal.activity-modal>Add Activity</button>
+<br><br>
 <table class="table table-hover">
     <thead>
         <tr>
@@ -88,6 +90,27 @@ export default {
         .then(() => {
           this.getActivities();
         });
+    },
+    initForm() {
+      this.addActivityForm.date = '';
+      this.addActivityForm.duration = '';
+      this.addActivityForm.name = '';
+    },
+    onSubmit(event) {
+      event.preventDefault();
+      this.$refs.addActivityModal.hide();
+      const json = {
+        activity_date: this.addActivityForm.date,
+        activity_duration: this.addActivityForm.duration,
+        activity_name: this.addActivityForm.name,
+      };
+      this.addActivity(json);
+      this.initForm();
+    },
+    onReset(event) {
+      event.preventDefault();
+      this.$refs.addActivityModal.hide();
+      this.initForm();
     },
   },
   created() {
