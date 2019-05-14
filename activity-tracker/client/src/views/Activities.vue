@@ -25,11 +25,13 @@
                     v-b-modal.edit-activity-modal
                     @click="editActivity(activity)">
                 Update</b-button>
-                  <button type="button" class="btn btn-danger btn-sm">Delete</button>
+                  <button type="button"
+                  class="btn btn-danger btn-sm"
+                  v-on:click="deleteActivity(activity)">
+                  Delete</button>
                 </div>
               </td>
         </tr>
-
     </tbody>
 </table>
 
@@ -150,12 +152,20 @@ export default {
           this.getActivities();
         });
     },
-    updateActivity(activityId) {
+    // TODO works only for date. otherwise breaks. api change needed.
+    updateActivity(json, activityId) {
       const path = `http://localhost:5000/activities/${activityId}`;
-      axios.put(path, activityId)
+      axios.put(path, json)
         .then(() => {
           this.getActivities();
           this.message = 'Activity updated!';
+        });
+    },
+    deleteActivity(activity) {
+      const path = `http://localhost:5000/activities/${activity.activity_id}`;
+      axios.delete(path, activity.activity_id)
+        .then(() => {
+          this.message = 'Activitiy Deleted!';
         });
     },
     initForm() {
@@ -190,8 +200,6 @@ export default {
       this.getActivities();
     },
     editActivity(activity) {
-      console.log('activity object');
-      console.log(activity);
       this.editActivityForm = activity;
     },
     onSubmitUpdate(event) {
@@ -204,7 +212,7 @@ export default {
       };
       console.log('onsubmitupdate');
       console.log(json);
-      this.updateActivity(this.editActivity.activity_id);
+      this.updateActivity(json, this.editActivityForm.activity_id);
     },
   },
   created() {
