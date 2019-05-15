@@ -63,18 +63,8 @@ def item_deleted_successfully(response):
         return ITEM_DELETED_SUCCESSFULLY
 
 
-# todo update method to update all fields at once + response from query only returns first field that is updated
 def update_item_by_id(activity_id, json, resource):
-    activity_date = 'activity_date'
-    activity_name = 'activity_name'
-    activity_duration = 'activity_duration'
-
-    if len(json) > 0 and activity_date in json.keys():
-        return update_activity_date(activity_id, json, resource)
-    if len(json) > 0 and activity_name in json.keys():
-        return update_activity_name(activity_id, json, resource)
-    if len(json) > 0 and activity_duration in json.keys():
-        return update_activity_duration(activity_id, json, resource)
+    return update_item_fields(activity_id, json, resource)
 
 
 def update_activity_duration(activity_id, json, resource):
@@ -95,16 +85,27 @@ def update_activity_date(activity_id, json, resource):
     return update_item_fields(activity_id, activity_date_value, field_name, resource)
 
 
-def update_item_fields(activity_id, field_value, field_name, resource):
+def update_item_fields(activity_id, json, resource):
+    activity_date, activity_duration, activity_name = parse_json_values(json)
+
     item = resource.update_item(
         Key={'id': str(activity_id)},
-        UpdateExpression='set ' + field_name + '= :a',
+        UpdateExpression="set activity_date = :date, activity_name= :name, activity_duration = :duration",
         ExpressionAttributeValues={
-            ':a': field_value,
+            ':date': activity_date,
+            ':name': activity_name,
+            ':duration': activity_duration
         },
         ReturnValues="UPDATED_NEW"
     )
     return item
+
+
+def parse_json_values(json):
+    activity_date = json['activity_date']
+    activity_name = json['activity_name']
+    activity_duration = json['activity_duration']
+    return activity_date, activity_duration, activity_name
 
 
 def query_by_activity(json, resource):
