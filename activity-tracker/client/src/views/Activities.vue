@@ -1,26 +1,19 @@
 <template>
   <div class="container">
-      <div>
-          <b-jumbotron>
-              <template slot="header">Activity Tracker</template>
-<hr class="my-4">
-<template slot="lead">
-    This is an app centered around tracking fitness
-</template>
-<b-button variant="primary" v-b-modal.activity-modal>
+    <div>
+  <b-jumbotron header="Activity Tracker" lead="This is an app centered around tracking fitness">
+<b-button variant="primary" id="add-new-activity" v-b-modal.activity-modal>
     Add A New Activity</b-button>
-          </b-jumbotron>
-      </div>
-<h1 class="view-all-activities">All Activities</h1>
-<alert :message=message v-if="showMessage"></alert>
-<br><br>
+  </b-jumbotron>
+</div>
+<h1 id="all-activities">Your Activities</h1>
 <table class="table table-hover">
     <thead>
         <tr>
             <th scope="col">Date</th>
             <th scope="col">Duration</th>
             <th scope="col">Name</th>
-            <th></th>
+            <th>Update or Delete Activity</th>
         </tr>
     </thead>
     <tbody>
@@ -133,7 +126,9 @@
                   type="submit"
                   @click="deleteActivity(activityToDelete)">
                   Yes</b-button>
-                  <b-button type = "reset" variant="danger">Heck No</b-button>
+                  <b-button type="reset" 
+                  variant="danger"
+                  @click="onCancel">Nah</b-button>
 </b-modal>
 </div>
 </template>
@@ -157,7 +152,6 @@ export default {
         activity_name: '',
       },
       itemToDelete: '',
-      showModal: false,
       message: '',
       showMessage: false,
     };
@@ -175,6 +169,11 @@ export default {
       axios.post(path, json)
         .then(() => {
           this.getActivities();
+          this.showMessage = true;
+          this.$notify({
+            group: 'activity-added',
+            text: 'Activity Added!',
+          });
         });
     },
     // TODO works only for date. otherwise breaks. api change needed.
@@ -187,12 +186,16 @@ export default {
         });
     },
     deleteActivity(activity) {
-      console.log(activity);
       this.$refs.deleteActivityModal.hide();
       const path = `http://localhost:5000/activities/${activity.activity_id}`;
       axios.delete(path, activity.activity_id)
         .then(() => {
           this.message = 'Activitiy Deleted!';
+          this.$notify({
+            group: 'activity-added',
+            text: 'Activity Deleted!',
+          });
+          this.getActivities();
         });
     },
     initForm() {
@@ -220,10 +223,13 @@ export default {
       this.$refs.addActivityModal.hide();
       this.initForm();
     },
+    onCancel(event) {
+      event.preventDefault();
+      this.$refs.deleteActivityModal.hide();
+    },
     onResetUpdate(event) {
       event.preventDefault();
       this.$refs.editActivityModal.hide();
-      this.initForm();
       this.getActivities();
     },
     editActivity(activity) {
@@ -237,8 +243,6 @@ export default {
         activity_duration: this.editActivityForm.activity_duration,
         activity_name: this.editActivityForm.activity_name,
       };
-      console.log('onsubmitupdate');
-      console.log(json);
       this.updateActivity(json, this.editActivityForm.activity_id);
     },
   },
