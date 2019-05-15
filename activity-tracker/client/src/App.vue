@@ -1,7 +1,6 @@
 <template>
   <div id="app">
     <div id="nav">
-      <router-link to="/activities">View All Activities</router-link>
     </div>
     <router-view/>
   </div>

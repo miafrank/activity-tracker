@@ -1,8 +1,18 @@
 <template>
   <div class="container">
-<h1>Activities</h1>
+      <div>
+          <b-jumbotron>
+              <template slot="header">Activity Tracker</template>
+<hr class="my-4">
+<template slot="lead">
+    This is an app centered around tracking fitness
+</template>
+<b-button variant="primary" v-b-modal.activity-modal>
+    Add A New Activity</b-button>
+          </b-jumbotron>
+      </div>
+<h1 class="view-all-activities">All Activities</h1>
 <alert :message=message v-if="showMessage"></alert>
-<button type="button" class="btn btn-success btn-sm" v-b-modal.activity-modal>Add Activity</button>
 <br><br>
 <table class="table table-hover">
     <thead>
@@ -10,6 +20,7 @@
             <th scope="col">Date</th>
             <th scope="col">Duration</th>
             <th scope="col">Name</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
@@ -20,15 +31,15 @@
             <td>
                 <div class="btn-group" role="group">
                 <b-button
-                    type="button"
-                    class="btn btn-warning btn-sm"
+                    variant="outline-success"
                     v-b-modal.edit-activity-modal
                     @click="editActivity(activity)">
                 Update</b-button>
-                  <button type="button"
-                  class="btn btn-danger btn-sm"
-                  v-on:click="deleteActivity(activity)">
-                  Delete</button>
+                  <b-button
+                  variant="outline-danger"
+                  @click="activityToDelete=activity"
+                  v-b-modal.delete-activity-modal>
+                  Delete</b-button>
                 </div>
               </td>
         </tr>
@@ -107,10 +118,22 @@
                       placeholder="Edit author">
         </b-form-input>
       </b-form-group>
-    <b-button type="submit" class="btn btn-warning btn-sm" v-b-modal.edit-activity-modal>
-        Update</b-button>
-    <b-button type="reset" class="btn btn-warning btn-sm" variant="danger">Cancel</b-button>
+    <b-button type="submit" variant="outline-success"
+    v-b-modal.edit-activity-modal class="update-button-modal"
+    >Update</b-button>
+    <b-button type="reset" variant="outline-danger" class="cancel-button-modal">Cancel</b-button>
   </b-form>
+</b-modal>
+<b-modal ref="deleteActivityModal"
+         id="delete-activity-modal"
+         title="are you sure you want to delete?"
+         hide-footer>
+                  <b-button
+                  variant="success"
+                  type="submit"
+                  @click="deleteActivity(activityToDelete)">
+                  Yes</b-button>
+                  <b-button type = "reset" variant="danger">Heck No</b-button>
 </b-modal>
 </div>
 </template>
@@ -133,6 +156,8 @@ export default {
         activity_duration: '',
         activity_name: '',
       },
+      itemToDelete: '',
+      showModal: false,
       message: '',
       showMessage: false,
     };
@@ -162,6 +187,8 @@ export default {
         });
     },
     deleteActivity(activity) {
+      console.log(activity);
+      this.$refs.deleteActivityModal.hide();
       const path = `http://localhost:5000/activities/${activity.activity_id}`;
       axios.delete(path, activity.activity_id)
         .then(() => {
