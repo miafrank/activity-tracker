@@ -126,7 +126,7 @@
                   type="submit"
                   @click="deleteActivity(activityToDelete)">
                   Yes</b-button>
-                  <b-button type="reset" 
+                  <b-button type="reset"
                   variant="danger"
                   @click="onCancel">Nah</b-button>
 </b-modal>
@@ -176,7 +176,6 @@ export default {
           });
         });
     },
-    // TODO works only for date. otherwise breaks. api change needed.
     updateActivity(json, activityId) {
       const path = `http://localhost:5000/activities/${activityId}`;
       axios.put(path, json)
