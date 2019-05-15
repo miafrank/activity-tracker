@@ -67,24 +67,6 @@ def update_item_by_id(activity_id, json, resource):
     return update_item_fields(activity_id, json, resource)
 
 
-def update_activity_duration(activity_id, json, resource):
-    field_name = 'activity_duration'
-    activity_duration_value = json['activity_duration']
-    return update_item_fields(activity_id, activity_duration_value, field_name, resource)
-
-
-def update_activity_name(activity_id, json, resource):
-    field_name = 'activity_name'
-    activity_name_value = json['activity_name']
-    return update_item_fields(activity_id, activity_name_value, field_name, resource)
-
-
-def update_activity_date(activity_id, json, resource):
-    field_name = 'activity_date'
-    activity_date_value = json['activity_date']
-    return update_item_fields(activity_id, activity_date_value, field_name, resource)
-
-
 def update_item_fields(activity_id, json, resource):
     activity_date, activity_duration, activity_name = parse_json_values(json)
 
