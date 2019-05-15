@@ -16,6 +16,7 @@ setup(name='activity-rest-api',
                                                                                                             'flask',
                                                                                                             'requests',
                                                                                                             'moto',
-                                                                                                            'Flask-API.yandex'
+                                                                                                            'Flask-API.yandex',
+                                                                                                            'pytest'
                                                                                                             ]
       )
