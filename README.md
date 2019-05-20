@@ -1,7 +1,12 @@
+## configure aws cli
+    $ aws configure
+
 ## run script to create dynamodb table
     $ sh create.sh 
-## install packages
+## install python packages
     $ pipenv install
+## install node packages
+    $ npm install
 ## activate virtual env
     $ pipenv shell
 ## run app with auto reload
