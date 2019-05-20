@@ -161,18 +161,17 @@ def test_query_by_activity():
 
 
 @mock_dynamodb2
-@pytest.skip
 # fixme test failing in filter by date
 def test_query_by_date():
     table = dynamodb_setup()
-    activity_start_and_end_dates = {'start_date': "04/01/2019", 'end_date': "04/15/2019"}
+    activity_start_and_end_dates = {"start_date": "04012019", "end_date": "04152019"}
 
     item_within_date_range = table.put_item(
         Item={
             "activity_date": "04/17/2019",
             "activity_duration": "1",
             "id": "de33dfef-e157-48a2-b6d9-fa28caf4db99",
-            'activity_name': "running"
+            "activity_name": "running"
         })
 
     item_out_of_date_range = table.put_item(

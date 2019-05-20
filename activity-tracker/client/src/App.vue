@@ -2,9 +2,20 @@
   <div id="app">
     <notifications group="activity-added" />
     <router-view/>
+    <Activities></Activities>
   </div>
 </template>
 
+<script>
+import Activities from './components/Activities.vue';
+
+export default {
+  name: 'app',
+  components: {
+    Activities,
+  },
+};
+</script>
 <style>
 @viewport {
   min-height: 100vh;

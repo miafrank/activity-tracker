@@ -1,6 +1,6 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Activities from './views/Activities.vue';
+import Activities from './components/Activities.vue';
 
 Vue.use(Router);
 
