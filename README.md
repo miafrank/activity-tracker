@@ -28,5 +28,6 @@
 ### tech stack
 + language: python 3.7
 + api framework: flask 1.0.2
-+ unit testing frameworks: pytest, unittest, moto
++ unit testing frameworks: pytest, unittest, moto, chai, mocha, moxios
 + database: aws dynamodb
++ front end framework: vue.js
