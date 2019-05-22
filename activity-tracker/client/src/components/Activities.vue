@@ -164,6 +164,10 @@ export default {
       axios.get(path)
         .then((res) => {
           this.activities = res.data.activities;
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
         });
     },
     addActivity(json) {
@@ -175,7 +179,11 @@ export default {
           this.$notify({
             group: 'activity-added',
             text: 'Activity Added!',
-          });
+          })
+            .catch((error) => {
+            // eslint-disable-next-line
+            console.error(error);
+            });
         });
     },
     updateActivity(json, activityId) {
@@ -184,6 +192,10 @@ export default {
         .then(() => {
           this.getActivities();
           this.message = 'Activity updated!';
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.log(error);
         });
     },
     deleteActivity(activity) {
@@ -197,6 +209,10 @@ export default {
             text: 'Activity Deleted!',
           });
           this.getActivities();
+        })
+        .catch((error) => {
+          // eslint-disable-next-line
+          console.error(error);
         });
     },
     initForm() {
