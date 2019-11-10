@@ -1,6 +1,6 @@
 import boto3
 
-from config import ACTIVITY_TABLE_NAME
+from app.config import ACTIVITY_TABLE_NAME
 
 
 def activity_table_resource():
