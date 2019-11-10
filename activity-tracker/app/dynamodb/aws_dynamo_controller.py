@@ -4,8 +4,6 @@ import uuid
 from boto3.dynamodb.conditions import Attr
 from flask_api import status
 
-from app import utils
-from . import dynamodb_utils
 
 
 ITEM_NOT_FOUND = "item not found"
@@ -16,13 +14,6 @@ def generate_uuid():
     random_uuid = uuid.uuid4()
     return str(random_uuid)
 
-
-def get_all_items(activity_table_name):
-    response = boto3.client('dynamodb').scan(TableName=activity_table_name)
-    items = []
-    for item in response['Items']:
-        items.append(parse_multi_item_response(item))
-    return items
 
 
 def create_new_item(json, resource):
@@ -133,16 +124,6 @@ def parse_single_item_response(item):
     return item_response_as_dict(activity_date, activity_duration, activity_id, activity_name)
 
 
-def parse_multi_item_response(item):
-    activity_id = get_item_field_value(item['id'])
-    activity_date = get_item_field_value(item['activity_date'])
-    activity_name = get_item_field_value(item['activity_name'])
-    activity_duration = get_item_field_value(item['activity_duration'])
-
-    item_dict = item_response_as_dict(activity_date, activity_duration, activity_id, activity_name)
-    return item_dict
-
-
 def item_response_as_dict(activity_date, activity_duration, activity_id, activity_name):
     item_dict = {
         'activity_id': activity_id,
@@ -151,7 +132,3 @@ def item_response_as_dict(activity_date, activity_duration, activity_id, activit
         'activity_duration': activity_duration
     }
     return item_dict
-
-
-def get_item_field_value(field_name):
-    return field_name.get('S')
