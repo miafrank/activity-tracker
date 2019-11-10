@@ -1,3 +1,6 @@
+import uuid
+
+
 def get_rows(item):
     return {
         'activity_id': item['id'].get('S'),
@@ -5,3 +8,7 @@ def get_rows(item):
         'activity_name': item['activity_name'].get('S'),
         'activity_duration': item['activity_duration'].get('S')
     }
+
+
+def generate_uuid():
+    return str(uuid.uuid4())

@@ -1,5 +1,5 @@
 from flask import Flask, jsonify, request
-from app.dynamodb import aws_dynamo_controller, dynamodb_resource, dynamodb_utils
+from app.dynamodb import aws_dynamo_controller, resource, dynamodb_utils
 from flask_cors import CORS
 
 app = Flask(__name__)
@@ -8,15 +8,13 @@ enable_cors_for_all_routes = CORS(app)
 
 
 @app.route("/activities", methods=['GET'])
-def get_all_items():
+def get_all_activities():
     return jsonify(dynamodb_utils.get_all_items())
 
 
 @app.route('/activities', methods=['POST'])
-def create_activity():
-    request_data = request.get_json()
-    activity_id = aws_dynamo_controller.create_new_item(request_data, dynamodb_resource.set_up_resource())
-    return jsonify(id=activity_id)
+def create_new_acitivity():
+    return jsonify(id= dynamodb_utils.create_new_item(request.get_json())['id'])
 
 
 @app.route('/activities/<activity_id>', methods=['GET'])
@@ -24,7 +22,7 @@ def get_activity_by_id(activity_id):
     item = \
         aws_dynamo_controller.get_item_by_id(
             activity_id,
-            dynamodb_resource.set_up_resource(),
+            resource.set_up_resource(),
             activity_table_name)
     return jsonify(item=item)
 
@@ -36,7 +34,7 @@ def update_activity_by_id(activity_id):
         aws_dynamo_controller.update_item_by_id(
             activity_id,
             request_data,
-            dynamodb_resource.set_up_resource())
+            resource.set_up_resource())
 
     return jsonify(update_item)
 
@@ -46,7 +44,7 @@ def delete_activity_by_id(activity_id):
     deleted_item = \
         aws_dynamo_controller.delete_item_by_id(
             activity_id,
-            dynamodb_resource.set_up_resource(),
+            resource.set_up_resource(),
             activity_table_name)
     return jsonify(item=deleted_item)
 
