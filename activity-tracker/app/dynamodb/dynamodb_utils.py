@@ -1,9 +1,9 @@
-import boto3
+from . import table_resource
+from app import utils
+
+dynamodb_client = table_resource.activity_table_resource()
 
 
-def get_all_items(activity_table_name):
-    response = boto3.client('dynamodb').scan(TableName=activity_table_name)
-    items = []
-    for item in response['Items']:
-        items.append(parse_multi_item_response(item))
-    return items
+def get_all_items():
+    return [utils.get_rows(item) for item in dynamodb_client['Items']]
+
