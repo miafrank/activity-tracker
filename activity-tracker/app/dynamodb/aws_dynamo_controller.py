@@ -6,10 +6,6 @@ from flask_api import status
 
 
 
-ITEM_NOT_FOUND = "item not found"
-ITEM_DELETED_SUCCESSFULLY = "item deleted successfully"
-
-
 def generate_uuid():
     random_uuid = uuid.uuid4()
     return str(random_uuid)
