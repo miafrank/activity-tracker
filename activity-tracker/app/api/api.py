@@ -1,8 +1,6 @@
 from flask import Flask, jsonify, request
-from app.dynamodb import aws_dynamo_controller
-from app.dynamodb import dynamodb_resource
+from app.dynamodb import aws_dynamo_controller, dynamodb_resource, dynamodb_utils
 from flask_cors import CORS
-
 
 app = Flask(__name__)
 activity_table_name = 'activity'
@@ -11,7 +9,7 @@ enable_cors_for_all_routes = CORS(app)
 
 @app.route("/activities", methods=['GET'])
 def get_all_items():
-    return jsonify(activities=aws_dynamo_controller.get_all_items(activity_table_name))
+    return jsonify(dynamodb_utils.get_all_items())
 
 
 @app.route('/activities', methods=['POST'])

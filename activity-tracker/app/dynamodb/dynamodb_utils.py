@@ -5,5 +5,5 @@ dynamodb_client = table_resource.activity_table_resource()
 
 
 def get_all_items():
-    return [utils.get_rows(item) for item in dynamodb_client['Items']]
-
+    items = [utils.get_rows(item) for item in dynamodb_client['Items']]
+    return items
