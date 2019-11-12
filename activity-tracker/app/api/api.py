@@ -13,40 +13,24 @@ def get_all_activities():
 
 
 @app.route('/activities', methods=['POST'])
-def create_new_acitivity():
-    return jsonify(id= dynamodb_utils.create_new_item(request.get_json())['id'])
+def create_new_activity():
+    return jsonify(id=dynamodb_utils.create_new_item(request.get_json())['id'])
 
 
 @app.route('/activities/<activity_id>', methods=['GET'])
 def get_activity_by_id(activity_id):
-    item = \
-        aws_dynamo_controller.get_item_by_id(
-            activity_id,
-            resource.set_up_resource(),
-            activity_table_name)
-    return jsonify(item=item)
+    return jsonify(item=dynamodb_utils.get_activity_by_id(activity_id))
 
 
 @app.route('/activities/<activity_id>', methods=['PUT'])
 def update_activity_by_id(activity_id):
     request_data = request.get_json()
-    update_item = \
-        aws_dynamo_controller.update_item_by_id(
-            activity_id,
-            request_data,
-            resource.set_up_resource())
-
-    return jsonify(update_item)
+    return jsonify(dynamodb_utils.update_item_by_id(activity_id, request_data))
 
 
 @app.route('/activities/<activity_id>', methods=['DELETE', 'POST'])
 def delete_activity_by_id(activity_id):
-    deleted_item = \
-        aws_dynamo_controller.delete_item_by_id(
-            activity_id,
-            resource.set_up_resource(),
-            activity_table_name)
-    return jsonify(item=deleted_item)
+    return jsonify(item=dynamodb_utils.delete_item_by_id(activity_id))
 
 
 if __name__ == '__main__':
