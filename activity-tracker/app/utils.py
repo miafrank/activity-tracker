@@ -1,15 +1,6 @@
 import uuid
 
 
-def get_row_by_column_name(item):
-    return {
-        'activity_id': item['id'].get('S'),
-        'activity_date': item['activity_date'].get('S'),
-        'activity_name': item['activity_name'].get('S'),
-        'activity_duration': item['activity_duration'].get('S')
-    }
-
-
 def get_rows(item):
     return {
         'activity_id': item['id'],
@@ -20,4 +11,7 @@ def get_rows(item):
 
 
 def generate_uuid():
+    """
+    :return: uuid as str
+    """
     return str(uuid.uuid4())
