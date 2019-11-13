@@ -1,5 +1,7 @@
 from flask_api import status
 
+import logging
+
 from . import dynamodb_resource_service
 from app import utils
 from app.config import ITEM_NOT_FOUND, ITEM_DELETED_SUCCESSFULLY
@@ -48,16 +50,11 @@ def update_item_by_id(activity_id, payload):
 
 
 def item_deleted_successfully(response):
-    response_meta = response['ResponseMetadata']
-    http_status = response_meta['HTTPStatusCode']
-
-    if http_status == status.HTTP_200_OK:
-        return ITEM_DELETED_SUCCESSFULLY
+    http_response = response['ResponseMetadata']['HTTPStatusCode']
+    return ITEM_DELETED_SUCCESSFULLY if http_response == status.HTTP_200_OK else logging.info("Something went wrong")
 
 
 def delete_item_by_id(activity_id):
-    item_exists = get_activity_by_id(activity_id)
-
-    if item_exists:
+    if get_activity_by_id(activity_id):
         deleted_item = dynamodb_resource.delete_item(Key={'id': str(activity_id)})
         return item_deleted_successfully(deleted_item)
