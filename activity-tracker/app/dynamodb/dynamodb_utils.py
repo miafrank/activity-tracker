@@ -12,6 +12,7 @@ def get_all_items(client):
 
 
 def create_new_item(json, resource):
+    # todo add validation
     json['id'] = utils.generate_uuid()
     resource.put_item(Item=json)
     return json
@@ -24,7 +25,8 @@ def get_item_by_id(activity_id, resource):
 
 def get_activity_by_id(activity_id, resource):
     response = get_item_by_id(activity_id, resource)
-    return utils.get_rows(response['Item']) if 'Item' in response.keys() else ITEM_NOT_FOUND
+    if 'Item' in response:
+        return utils.get_rows(response['Item'])
 
 
 def update_item_by_id(activity_id, payload, resource):
@@ -54,3 +56,5 @@ def delete_item_by_id(activity_id, resource):
     if get_activity_by_id(activity_id, resource):
         deleted_item = resource.delete_item(Key={'id': str(activity_id)})
         return item_deleted_successfully(deleted_item)
+    else:
+        return ITEM_NOT_FOUND
