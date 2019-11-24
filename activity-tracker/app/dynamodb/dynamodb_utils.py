@@ -20,11 +20,6 @@ def create_new_item(json, resource):
 
 def get_item_by_id(activity_id, resource):
     response = resource.get_item(Key={'id': str(activity_id)})
-    return response
-
-
-def get_activity_by_id(activity_id, resource):
-    response = get_item_by_id(activity_id, resource)
     if 'Item' in response:
         return utils.get_rows(response['Item'])
 
@@ -53,7 +48,7 @@ def item_deleted_successfully(response):
 
 
 def delete_item_by_id(activity_id, resource):
-    if get_activity_by_id(activity_id, resource):
+    if get_item_by_id(activity_id, resource):
         deleted_item = resource.delete_item(Key={'id': str(activity_id)})
         return item_deleted_successfully(deleted_item)
     else:

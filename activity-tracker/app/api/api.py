@@ -20,7 +20,7 @@ def create_new_activity():
 
 @app.route('/activities/<activity_id>', methods=['GET'])
 def get_activity_by_id(activity_id):
-    return jsonify(item=dynamodb_utils.get_activity_by_id(activity_id, dynamodb_resource()))
+    return jsonify(item=dynamodb_utils.get_item_by_id(activity_id, dynamodb_resource()))
 
 
 @app.route('/activities/<activity_id>', methods=['PUT'])

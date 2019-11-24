@@ -2,7 +2,7 @@ import boto3
 from moto import mock_dynamodb2
 
 from app.dynamodb import dynamodb_utils
-
+from app.config import ITEM_NOT_FOUND
 
 @mock_dynamodb2
 def dynamodb_setup():
@@ -65,7 +65,7 @@ def test_get_item_by_id():
     activity['id'] = '123'
     table.put_item(Item=activity)
 
-    mock_item = dynamodb_utils.get_activity_by_id(activity['id'], table)
+    mock_item = dynamodb_utils.get_item_by_id(activity['id'], table)
 
     assert mock_item['activity_id'] == '123'
     assert mock_item['activity_duration'] == '50'
@@ -87,7 +87,7 @@ def test_delete_item_by_id():
 def test_delete_item_by_id_where_id_not_found_in_db():
     deleted_item = dynamodb_utils.delete_item_by_id('222', dynamodb_setup())
 
-    assert deleted_item == 'item not found'
+    assert deleted_item == ITEM_NOT_FOUND
 
 
 @mock_dynamodb2
