@@ -25,8 +25,7 @@ def get_activity_by_id(activity_id):
 
 @app.route('/activities/<activity_id>', methods=['PUT'])
 def update_activity_by_id(activity_id):
-    request_data = request.get_json()
-    return jsonify(dynamodb_utils.update_item_by_id(activity_id, request_data, dynamodb_resource()))
+    return jsonify(dynamodb_utils.update_item_by_id(activity_id, request.get_json(), dynamodb_resource()))
 
 
 @app.route('/activities/<activity_id>', methods=['DELETE', 'POST'])
