@@ -3,25 +3,27 @@ from flask_api import status
 import logging
 
 from app import utils
-from app.config import ITEM_NOT_FOUND, ITEM_DELETED_SUCCESSFULLY
+from app.config import ITEM_NOT_FOUND, ITEM_DELETED_SUCCESSFULLY, VALIDATION_ERROR
+from app.validator import validate
 
 
 def get_all_items(client):
-    items = [utils.get_rows(item) for item in client['Items']]
+    items = [dynamodb_rows_to_json(item) for item in client['Items']]
     return items
 
 
 def create_new_item(json, resource):
-    # todo add validation
-    json['id'] = utils.generate_uuid()
-    resource.put_item(Item=json)
+    # todo validation fails if input is not valid but the message is not user friendly.
+    if validate(activity=json):
+        json['id'] = utils.generate_uuid()
+        resource.put_item(Item=json)
     return json
 
 
 def get_item_by_id(activity_id, resource):
     response = resource.get_item(Key={'id': str(activity_id)})
     if 'Item' in response:
-        return utils.get_rows(response['Item'])
+        return dynamodb_rows_to_json(response['Item'])
 
 
 def update_item_by_id(activity_id, payload, resource):
@@ -53,3 +55,12 @@ def delete_item_by_id(activity_id, resource):
         return item_deleted_successfully(deleted_item)
     else:
         return ITEM_NOT_FOUND
+
+
+def dynamodb_rows_to_json(item):
+    return {
+        'activity_id': item['id'],
+        'activity_date': item['activity_date'],
+        'activity_name': item['activity_name'],
+        'activity_duration': item['activity_duration']
+    }

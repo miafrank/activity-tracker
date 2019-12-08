@@ -4,6 +4,7 @@ from moto import mock_dynamodb2
 from app.dynamodb import dynamodb_utils
 from app.config import ITEM_NOT_FOUND
 
+
 @mock_dynamodb2
 def dynamodb_setup():
     dynamodb = boto3.resource('dynamodb', 'us-east-1')
