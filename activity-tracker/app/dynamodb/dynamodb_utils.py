@@ -3,7 +3,7 @@ from flask_api import status
 import logging
 
 from app import utils
-from app.config import ITEM_NOT_FOUND, ITEM_DELETED_SUCCESSFULLY, VALIDATION_ERROR
+from app.config import ITEM_NOT_FOUND, ITEM_DELETED_SUCCESSFULLY
 from app.validator import validate
 
 
