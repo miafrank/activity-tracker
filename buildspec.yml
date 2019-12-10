@@ -4,6 +4,8 @@ phases:
   install:
     runtime-versions:
       python: 3.7
+    commands:
+      - pip install pytest
   build:
     commands:
       - echo running tests
