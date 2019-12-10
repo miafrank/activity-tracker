@@ -9,4 +9,4 @@ phases:
   build:
     commands:
       - echo running tests
-      - pytest
+      - python -m pytest
