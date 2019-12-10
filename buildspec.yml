@@ -8,6 +8,7 @@ phases:
       - pip install pytest
       - pip install boto3
       - pip install moto
+      - pip install flask_api
   build:
     commands:
       - echo running tests
