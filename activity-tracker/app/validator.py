@@ -7,6 +7,6 @@ def validate(activity):
     """
     return (False
             if not activity['activity_date']
-            or activity['activity_name']
-            or activity['activity_duration']
+            or not activity['activity_name']
+            or not activity['activity_duration']
             else True)
