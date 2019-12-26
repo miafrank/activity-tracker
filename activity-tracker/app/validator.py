@@ -5,12 +5,8 @@ def validate(activity):
     :param activity:
     :return: True (if new activity is valid)
     """
-    assert activity['activity_date'], "activity date cannot be null"
-    assert activity['activity_name'], "activity name cannot be null"
-    assert activity['activity_duration'], "activity duration cannot be null"
-
-    return (False if
-            not activity['activity_date']
+    return (False
+            if not activity['activity_date']
             or activity['activity_name']
             or activity['activity_duration']
             else True)
