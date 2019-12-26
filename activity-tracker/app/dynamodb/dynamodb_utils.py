@@ -13,12 +13,9 @@ def get_all_items(client):
 
 
 def create_new_item(json, resource):
-    # todo validation fails if input is not valid but the message is not user friendly.
     if validate(activity=json):
         json['id'] = utils.generate_uuid()
         resource.put_item(Item=json)
-    else:
-        print("something went wrong")
     return json
 
 
@@ -29,19 +26,22 @@ def get_item_by_id(activity_id, resource):
 
 
 def update_item_by_id(activity_id, payload, resource):
-    # TODO - this is gross but if all values are not passed update expression, exception is raised.
-    # it is kind of a hassle to update one by one, so for now i am parsing the json so that all values
-    # in expression update are passed to satisfy boto3
-    activity_date, activity_duration, activity_name = (payload['activity_date'],
-                                                       payload['activity_duration'],
-                                                       payload['activity_name'])
+    activity_by_id = get_item_by_id(activity_id, resource)
+
+    if 'activity_date' not in payload:
+        payload['activity_date'] = activity_by_id['activity_date']
+    if 'activity_duration' not in payload:
+        payload['activity_duration'] = activity_by_id['activity_duration']
+    if 'activity_name' not in payload:
+        payload['activity_name'] = activity_by_id['activity_name']
+
     return resource.update_item(
         Key={'id': str(activity_id)},
         UpdateExpression="set activity_date = :date, activity_name= :name, activity_duration = :duration",
         ExpressionAttributeValues={
-            ':date': activity_date,
-            ':name': activity_name,
-            ':duration': activity_duration
+            ':date': payload['activity_date'],
+            ':name': payload['activity_duration'],
+            ':duration': payload['activity_name']
         },
         ReturnValues="UPDATED_NEW")
 
