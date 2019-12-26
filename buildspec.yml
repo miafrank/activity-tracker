@@ -1,0 +1,15 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.7
+    commands:
+      - pip install pytest
+      - pip install boto3
+      - pip install moto
+      - pip install flask_api
+  build:
+    commands:
+      - echo running tests
+      - python -m pytest

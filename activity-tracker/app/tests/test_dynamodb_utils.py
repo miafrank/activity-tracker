@@ -60,6 +60,15 @@ def test_create_new_item():
     
 
 @mock_dynamodb2
+def test_create_new_item_missing_fields():
+    mock_item = create_mock_item('04/23/2019', '', '3')
+
+    actual = dynamodb_utils.create_new_item(mock_item, dynamodb_setup())
+
+    assert 'id' not in actual
+
+
+@mock_dynamodb2
 def test_get_item_by_id():
     table = dynamodb_setup()
     activity = create_mock_item('02/09/2222', 'hang gliding', '50')
