@@ -40,8 +40,8 @@ def update_item_by_id(activity_id, payload, resource):
         UpdateExpression="set activity_date = :date, activity_name= :name, activity_duration = :duration",
         ExpressionAttributeValues={
             ':date': payload['activity_date'],
-            ':name': payload['activity_duration'],
-            ':duration': payload['activity_name']
+            ':name': payload['activity_name'],
+            ':duration': payload['activity_duration']
         },
         ReturnValues="UPDATED_NEW")
 
