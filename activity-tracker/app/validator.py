@@ -9,4 +9,8 @@ def validate(activity):
     assert activity['activity_name'], "activity name cannot be null"
     assert activity['activity_duration'], "activity duration cannot be null"
 
-    return True
+    return (False if
+            not activity['activity_date']
+            or activity['activity_name']
+            or activity['activity_duration']
+            else True)
