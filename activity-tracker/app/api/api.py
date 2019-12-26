@@ -10,7 +10,7 @@ enable_cors_for_all_routes = CORS(app)
 
 @app.route("/activities", methods=['GET'])
 def get_all_activities():
-    return jsonify(dynamodb_utils.get_all_items(dynamodb_client()))
+    return jsonify(activities=dynamodb_utils.get_all_items(dynamodb_client()))
 
 
 @app.route('/activities', methods=['POST'])
