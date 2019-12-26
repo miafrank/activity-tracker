@@ -1,9 +1,9 @@
 def validate(activity):
     """
     Validate input when creating new activity. All fields must be fulfilled to create a new
-    activity. If any activity field is not present, an AssertionError will be raised.
+    activity. If any activity field is not present, method will return False.
     :param activity:
-    :return: True (if new activity is valid)
+    :return: True (if activity is valid) False (if activity is invalid)
     """
     return (False
             if not activity['activity_date']
