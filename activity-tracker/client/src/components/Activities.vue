@@ -71,7 +71,7 @@
                       type="text"
                       v-model="addActivityForm.activity_name"
                       required
-                      placeholder="Enter author">
+                      placeholder="Enter Type of Activity">
         </b-form-input>
       </b-form-group>
     <b-button type="submit" variant="primary">Submit</b-button>
