@@ -75,7 +75,7 @@
         </b-form-input>
       </b-form-group>
     <b-button type="submit" variant="primary">Submit</b-button>
-    <b-button type="reset" variant="danger">Reset</b-button>
+    <b-button type="reset" variant="danger">Cancel</b-button>
   </b-form>
 </b-modal>
 
@@ -119,7 +119,7 @@
 </b-modal>
 <b-modal ref="deleteActivityModal"
          id="delete-activity-modal"
-         title="are you sure you want to delete?"
+         title="Are you sure you want to delete this activity?"
          hide-footer>
                   <b-button
                   variant="success"
@@ -128,7 +128,7 @@
                   Yes</b-button>
                   <b-button type="reset"
                   variant="danger"
-                  @click="onCancel">Nah</b-button>
+                  @click="onCancel">No</b-button>
 </b-modal>
 </div>
 </template>
